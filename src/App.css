@@ -1,0 +1,131 @@
+.terminal {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 2rem;
+  z-index: 10;
+}
+
+.history {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.history-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.command-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.prompt {
+  color: var(--text-cyan);
+  font-weight: bold;
+}
+
+.command-text {
+  color: #fff;
+}
+
+.output {
+  margin-top: 0.5rem;
+  white-space: pre-wrap;
+  color: var(--text-primary);
+}
+
+.output-multi {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.input-field {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-family: inherit;
+  font-size: inherit;
+  flex-grow: 1;
+  outline: none;
+  caret-color: transparent;
+  /* custom cursor handled by CSS */
+}
+
+/* Custom Cursor Effects */
+.cursor {
+  display: inline-block;
+  width: 10px;
+  height: 1.2em;
+  background-color: var(--text-primary);
+  animation: blink 1s step-end infinite;
+  vertical-align: text-bottom;
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Coloring Classes */
+.text-cyan {
+  color: var(--text-cyan);
+}
+
+.text-yellow {
+  color: var(--text-yellow);
+}
+
+.text-magenta {
+  color: var(--text-magenta);
+}
+
+.text-red {
+  color: var(--text-red);
+}
+
+.text-blue {
+  color: var(--text-blue);
+}
+
+.text-white {
+  color: #fff;
+}
+
+a.terminal-link {
+  color: var(--text-blue);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--text-blue);
+  transition: all 0.3s ease;
+}
+
+a.terminal-link:hover {
+  background-color: var(--text-blue);
+  color: var(--bg-color);
+}
+
+.ascii-art {
+  font-size: 10px;
+  line-height: 10px;
+  color: var(--text-yellow);
+  white-space: pre;
+  margin: 1rem 0;
+}
