@@ -257,9 +257,9 @@ function App() {
         ))}
       </div>
 
-      <div className="input-wrapper">
+      <div className="input-line">
         <span className="prompt">guest@uwaterloo:~$</span>
-        <div className={`input-box ${isFocused ? 'focused' : ''}`}>
+        <div style={{ position: 'relative', flexGrow: 1, display: 'flex', alignItems: 'center' }}>
           <span className="command-text" style={{ whiteSpace: 'pre' }}>{inputVal}</span>
           <span className={`cursor ${isFocused ? 'active' : 'inactive'}`}></span>
           <input
