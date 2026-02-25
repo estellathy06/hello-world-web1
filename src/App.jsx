@@ -153,7 +153,7 @@ function App() {
           output = (
             <div className="output-multi">
               <p className="text-yellow">Generating secure link...</p>
-              <p><a href="/Estella_Tang_Resume.pdf" target="_blank" className="terminal-link">Click here to view/download PDF</a></p>
+              <p><a href="/hello-world-web1/Estella_Tang_Resume.pdf" target="_blank" className="terminal-link">Click here to view/download PDF</a></p>
             </div>
           );
           break;
