@@ -38,6 +38,7 @@ function App() {
   ]);
   const [inputVal, setInputVal] = useState('');
   const [cmdIndex, setCmdIndex] = useState(-1);
+  const [isFocused, setIsFocused] = useState(true);
   const inputRef = useRef(null);
   const scrollRef = useRef(null);
 
@@ -244,11 +245,11 @@ function App() {
         ))}
       </div>
 
-      <div className="input-line">
+      <div className="input-wrapper">
         <span className="prompt">guest@uwaterloo:~$</span>
-        <div style={{ position: 'relative', flexGrow: 1, display: 'flex', alignItems: 'center' }}>
+        <div className={`input-box ${isFocused ? 'focused' : ''}`}>
           <span className="command-text" style={{ whiteSpace: 'pre' }}>{inputVal}</span>
-          <span className="cursor"></span>
+          <span className={`cursor ${isFocused ? 'active' : 'inactive'}`}></span>
           <input
             ref={inputRef}
             type="text"
@@ -257,6 +258,8 @@ function App() {
             value={inputVal}
             onChange={(e) => setInputVal(e.target.value)}
             onKeyDown={handleKeyDown}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
             autoComplete="off"
             spellCheck="false"
           />
