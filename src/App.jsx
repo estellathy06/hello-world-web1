@@ -189,8 +189,20 @@ function App() {
           output = null;
           break;
 
-        default:
-          output = <p className="text-red">Command not found: {trimmed}. Type 'hello world' for available commands.</p>;
+        default: {
+          const funnyErrors = [
+            `bash: ${trimmed}: command not found. Have you tried asking nicely?`,
+            `zsh: command not found: ${trimmed}. My developer didn't build that.`,
+            `[ERROR] ${trimmed} is invalid. Did you mean 'hello world'?`,
+            `System Exception: Segment Fault... just kidding. Type 'hello world'.`,
+            `${trimmed}? Never heard of it. Try 'hello world'.`,
+            `Are you trying to hack me? 🛡️ Access denied to '${trimmed}'.`,
+            `404: The command '${trimmed}' does not exist in this dimension.`,
+            `I'm sorry Dave, I'm afraid I can't do '${trimmed}'.`
+          ];
+          const randomError = funnyErrors[Math.floor(Math.random() * funnyErrors.length)];
+          output = <p className="text-red">{randomError}</p>;
+        }
       }
     }
 
