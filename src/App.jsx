@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import './App.css';
 
 const COMMANDS = {
-  help: 'Lists available commands',
+  'hello world': 'Lists available commands',
   whoami: 'Introduction & goals',
   projects: 'Deep dive into engineering projects',
   skills: 'Technical languages and tools',
@@ -31,7 +31,7 @@ function App() {
           <div className="ascii-art">{ASCII_ART}</div>
           <p>Welcome to the UWaterloo CS Co-op Interactive Portfolio Terminal.</p>
           <p>Initializing system components...</p>
-          <p className="text-cyan">Type <span className="text-yellow">help</span> to see available commands.</p>
+          <p className="text-cyan">Type <span className="text-yellow">hello world</span> to see available commands.</p>
         </div>
       )
     }
@@ -63,134 +63,134 @@ function App() {
 
     let output;
 
-    switch (mainCmd) {
-      case 'help':
-        output = (
-          <div className="output-multi">
-            {Object.entries(COMMANDS).map(([k, v]) => (
-              <p key={k}>
-                <span className="text-yellow" style={{ display: 'inline-block', width: '100px' }}>{k}</span>
-                <span className="text-secondary">- {v}</span>
-              </p>
-            ))}
-          </div>
-        );
-        break;
-
-      case 'whoami':
-        output = (
-          <div className="output-multi">
-            <p className="text-cyan">=========================================</p>
-            <p className="text-magenta font-bold">IDENTITY: Estella Tang</p>
-            <p className="text-white">STATUS: CS Student @ University of Waterloo</p>
-            <p>OBJECTIVE: Seeking co-op roles where I can architect robust systems, crush complex bugs, and build products at scale.</p>
-            <p>I thrive in high-impact environments. I am building toward a career in backend engineering, distributed systems, and AI.</p>
-            <p className="text-cyan">=========================================</p>
-          </div>
-        );
-        break;
-
-      case 'projects':
-        if (args[1] === '--detail') {
+    if (trimmed.toLowerCase() === 'hello world') {
+      output = (
+        <div className="output-multi">
+          {Object.entries(COMMANDS).map(([k, v]) => (
+            <p key={k}>
+              <span className="text-yellow" style={{ display: 'inline-block', width: '130px' }}>{k}</span>
+              <span className="text-secondary">- {v}</span>
+            </p>
+          ))}
+        </div>
+      );
+    } else {
+      switch (mainCmd) {
+        case 'whoami':
           output = (
             <div className="output-multi">
-              <p className="text-red">Error: Expected project ID. Usage: projects --detail [name]</p>
-              <p className="text-secondary">Available details: <span className="text-white">compiler, distributed-kv, neural-net</span></p>
+              <p className="text-cyan">=========================================</p>
+              <p className="text-magenta font-bold">IDENTITY: Estella Tang</p>
+              <p className="text-white">STATUS: CS Student @ University of Waterloo</p>
+              <p>OBJECTIVE: Seeking co-op roles where I can architect robust systems, crush complex bugs, and build products at scale.</p>
+              <p>I thrive in high-impact environments. I am building toward a career in backend engineering, distributed systems, and AI.</p>
+              <p className="text-cyan">=========================================</p>
             </div>
           );
-          if (args[2] === 'compiler') {
+          break;
+
+        case 'projects':
+          if (args[1] === '--detail') {
             output = (
               <div className="output-multi">
-                <p className="text-cyan">Project: C-Minus Compiler</p>
-                <p>- Developed a custom compiler in C++ using LLVM.</p>
-                <p>- Features: Lexical analysis, recursive descent parsing, semantic analysis, and optimized x86 code generation.</p>
-                <p>- <a href="#" className="terminal-link">View Repo</a></p>
+                <p className="text-red">Error: Expected project ID. Usage: projects --detail [name]</p>
+                <p className="text-secondary">Available details: <span className="text-white">compiler, distributed-kv, neural-net</span></p>
               </div>
             );
-          } else if (args[2] === 'distributed-kv') {
+            if (args[2] === 'compiler') {
+              output = (
+                <div className="output-multi">
+                  <p className="text-cyan">Project: C-Minus Compiler</p>
+                  <p>- Developed a custom compiler in C++ using LLVM.</p>
+                  <p>- Features: Lexical analysis, recursive descent parsing, semantic analysis, and optimized x86 code generation.</p>
+                  <p>- <a href="#" className="terminal-link">View Repo</a></p>
+                </div>
+              );
+            } else if (args[2] === 'distributed-kv') {
+              output = (
+                <div className="output-multi">
+                  <p className="text-cyan">Project: DistKV (Go)</p>
+                  <p>- Built a distributed key-value store implementing Raft consensus.</p>
+                  <p>- Features: Fault tolerance, leader election, log replication, snapshotting for fast recovery.</p>
+                  <p>- <a href="#" className="terminal-link">View Repo</a></p>
+                </div>
+              );
+            } else if (args[2] === 'neural-net') {
+              output = (
+                <div className="output-multi">
+                  <p className="text-cyan">Project: Zero-Dep Neural Network (Python)</p>
+                  <p>- Implemented backpropagation and gradient descent purely with NumPy.</p>
+                  <p>- Achieved 96% accuracy on MNIST. Heavily optimized matrix multiplications.</p>
+                  <p>- <a href="#" className="terminal-link">View Repo</a></p>
+                </div>
+              );
+            }
+          } else {
             output = (
               <div className="output-multi">
-                <p className="text-cyan">Project: DistKV (Go)</p>
-                <p>- Built a distributed key-value store implementing Raft consensus.</p>
-                <p>- Features: Fault tolerance, leader election, log replication, snapshotting for fast recovery.</p>
-                <p>- <a href="#" className="terminal-link">View Repo</a></p>
-              </div>
-            );
-          } else if (args[2] === 'neural-net') {
-            output = (
-              <div className="output-multi">
-                <p className="text-cyan">Project: Zero-Dep Neural Network (Python)</p>
-                <p>- Implemented backpropagation and gradient descent purely with NumPy.</p>
-                <p>- Achieved 96% accuracy on MNIST. Heavily optimized matrix multiplications.</p>
-                <p>- <a href="#" className="terminal-link">View Repo</a></p>
+                <p>1. <span className="text-yellow">compiler</span> - Custom C-like Compiler (C++, LLVM)</p>
+                <p>2. <span className="text-yellow">distributed-kv</span> - Distributed Database (Go, Raft)</p>
+                <p>3. <span className="text-yellow">neural-net</span> - Scratch Neural Network (Python, Math)</p>
+                <br />
+                <p className="text-secondary">Type <span className="text-white">projects --detail [name]</span> for engineering notes.</p>
               </div>
             );
           }
-        } else {
+          break;
+
+        case 'skills':
           output = (
             <div className="output-multi">
-              <p>1. <span className="text-yellow">compiler</span> - Custom C-like Compiler (C++, LLVM)</p>
-              <p>2. <span className="text-yellow">distributed-kv</span> - Distributed Database (Go, Raft)</p>
-              <p>3. <span className="text-yellow">neural-net</span> - Scratch Neural Network (Python, Math)</p>
-              <br />
-              <p className="text-secondary">Type <span className="text-white">projects --detail [name]</span> for engineering notes.</p>
+              <p><span className="text-blue">LANGUAGES:</span> C++, Go, Python, JavaScript, TypeScript, SQL, Bash</p>
+              <p><span className="text-blue">FRAMEWORKS:</span> React, Node.js, Express, Flask</p>
+              <p><span className="text-blue">TOOLS/DEVOPS:</span> Git, Docker, Linux, AWS, LLVM</p>
+              <p><span className="text-blue">THEORY:</span> Algorithms, Distributed Systems, Compilers, OS</p>
             </div>
           );
-        }
-        break;
+          break;
 
-      case 'skills':
-        output = (
-          <div className="output-multi">
-            <p><span className="text-blue">LANGUAGES:</span> C++, Go, Python, JavaScript, TypeScript, SQL, Bash</p>
-            <p><span className="text-blue">FRAMEWORKS:</span> React, Node.js, Express, Flask</p>
-            <p><span className="text-blue">TOOLS/DEVOPS:</span> Git, Docker, Linux, AWS, LLVM</p>
-            <p><span className="text-blue">THEORY:</span> Algorithms, Distributed Systems, Compilers, OS</p>
-          </div>
-        );
-        break;
+        case 'resume':
+          output = (
+            <div className="output-multi">
+              <p className="text-yellow">Generating secure link...</p>
+              <p><a href="/Estella_Tang_Resume.pdf" target="_blank" className="terminal-link">Click here to view/download PDF</a></p>
+            </div>
+          );
+          break;
 
-      case 'resume':
-        output = (
-          <div className="output-multi">
-            <p className="text-yellow">Generating secure link...</p>
-            <p><a href="/Estella_Tang_Resume.pdf" target="_blank" className="terminal-link">Click here to view/download PDF</a></p>
-          </div>
-        );
-        break;
+        case 'contact':
+          output = (
+            <div className="output-multi">
+              <p><span className="text-magenta">Email:</span>     <a href="mailto:example@uwaterloo.ca" className="terminal-link">example@uwaterloo.ca</a></p>
+              <p><span className="text-magenta">GitHub:</span>    <a href="https://github.com/estella" className="terminal-link">github.com/estella</a></p>
+              <p><span className="text-magenta">LinkedIn:</span>  <a href="https://linkedin.com/in/estellatang" className="terminal-link">linkedin.com/in/estellatang</a></p>
+            </div>
+          );
+          break;
 
-      case 'contact':
-        output = (
-          <div className="output-multi">
-            <p><span className="text-magenta">Email:</span>     <a href="mailto:example@uwaterloo.ca" className="terminal-link">example@uwaterloo.ca</a></p>
-            <p><span className="text-magenta">GitHub:</span>    <a href="https://github.com/estella" className="terminal-link">github.com/estella</a></p>
-            <p><span className="text-magenta">LinkedIn:</span>  <a href="https://linkedin.com/in/estellatang" className="terminal-link">linkedin.com/in/estellatang</a></p>
-          </div>
-        );
-        break;
+        case 'sysinfo':
+          output = (
+            <div className="output-multi text-secondary">
+              <p>OS: uwaterloo-arch 5.15.0-generic</p>
+              <p>Kernel: x86_64 Linux</p>
+              <p>Uptime: 2 days, 14 hours, 3 mins</p>
+              <p>Shell: custom-bash-react</p>
+              <p>Memory: 8192MiB / 16384MiB</p>
+            </div>
+          )
+          break;
 
-      case 'sysinfo':
-        output = (
-          <div className="output-multi text-secondary">
-            <p>OS: uwaterloo-arch 5.15.0-generic</p>
-            <p>Kernel: x86_64 Linux</p>
-            <p>Uptime: 2 days, 14 hours, 3 mins</p>
-            <p>Shell: custom-bash-react</p>
-            <p>Memory: 8192MiB / 16384MiB</p>
-          </div>
-        )
-        break;
+        case 'clear':
+          setHistory([]);
+          return;
 
-      case 'clear':
-        setHistory([]);
-        return;
+        case '':
+          output = null;
+          break;
 
-      case '':
-        output = null;
-        break;
-
-      default:
-        output = <p className="text-red">Command not found: {trimmed}. Type 'help' for available commands.</p>;
+        default:
+          output = <p className="text-red">Command not found: {trimmed}. Type 'hello world' for available commands.</p>;
+      }
     }
 
     setHistory(prev => [...prev, {
