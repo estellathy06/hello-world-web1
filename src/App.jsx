@@ -161,9 +161,9 @@ function App() {
         case 'contact':
           output = (
             <div className="output-multi">
-              <p><span className="text-magenta">Email:</span>     <a href="mailto:example@uwaterloo.ca" className="terminal-link">example@uwaterloo.ca</a></p>
-              <p><span className="text-magenta">GitHub:</span>    <a href="https://github.com/estella" className="terminal-link">github.com/estella</a></p>
-              <p><span className="text-magenta">LinkedIn:</span>  <a href="https://linkedin.com/in/estellatang" className="terminal-link">linkedin.com/in/estellatang</a></p>
+              <p><span className="text-magenta">Email:</span>     <a href="mailto:estella.thy06@gmail.com" className="terminal-link">estella.thy06@gmail.com</a></p>
+              <p><span className="text-magenta">GitHub:</span>    <a href="https://github.com/estellathy06" className="terminal-link">github.com/estellathy06</a></p>
+              <p><span className="text-magenta">LinkedIn:</span>  <a href="https://linkedin.com/in/estella-tang-9a2173299/" className="terminal-link">linkedin.com/in/estella-tang-9a2173299/</a></p>
             </div>
           );
           break;
