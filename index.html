@@ -7,6 +7,16 @@
   <title>WELCOME TO MYSITE</title>
   <meta name="description"
     content="Terminal-based interactive portfolio of Estella Tang, a Computer Science student at the University of Waterloo seeking Software Engineering co-op roles.">
+  <script>
+    // GitHub Pages SPA redirect handler
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var redirect = params.get('redirect');
+      if (redirect) {
+        window.history.replaceState(null, '', redirect);
+      }
+    })();
+  </script>
 </head>
 
 <body>

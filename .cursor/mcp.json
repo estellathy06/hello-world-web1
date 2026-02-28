@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "supabase": {
+      "command": "/Users/estellatang/.nvm/versions/node/v25.7.0/bin/npx",
+      "args": ["-y", "@supabase/mcp"]
+    }
+  }
+}

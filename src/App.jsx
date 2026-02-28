@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { supabase } from './lib/supabase';
 import './App.css';
 
 const COMMANDS = {
@@ -21,6 +22,32 @@ const ASCII_ART = `
                                               \\/           \\/ 
 `;
 
+// Fallback data if Supabase fetch fails
+const FALLBACK = {
+  profile: {
+    name: 'Estella Tang',
+    status: 'CS Student @ University of Waterloo',
+    objective: 'Seeking co-op roles where I can architect robust systems, crush complex bugs, and build products at scale.',
+    bio: 'I thrive in high-impact environments. I am building toward a career in backend engineering, distributed systems, and AI.'
+  },
+  projects: [
+    { slug: 'compiler', title: 'C-Minus Compiler', short_description: 'Custom C-like Compiler (C++, LLVM)', detail_bullets: ['Developed a custom compiler in C++ using LLVM.', 'Features: Lexical analysis, recursive descent parsing, semantic analysis, and optimized x86 code generation.'], repo_url: '#', sort_order: 1 },
+    { slug: 'distributed-kv', title: 'DistKV (Go)', short_description: 'Distributed Database (Go, Raft)', detail_bullets: ['Built a distributed key-value store implementing Raft consensus.', 'Features: Fault tolerance, leader election, log replication, snapshotting for fast recovery.'], repo_url: '#', sort_order: 2 },
+    { slug: 'neural-net', title: 'Zero-Dep Neural Network (Python)', short_description: 'Scratch Neural Network (Python, Math)', detail_bullets: ['Implemented backpropagation and gradient descent purely with NumPy.', 'Achieved 96% accuracy on MNIST. Heavily optimized matrix multiplications.'], repo_url: '#', sort_order: 3 },
+  ],
+  skills: [
+    { category: 'LANGUAGES', items: 'C++, Go, Python, JavaScript, TypeScript, SQL, Bash' },
+    { category: 'FRAMEWORKS', items: 'React, Node.js, Express, Flask' },
+    { category: 'TOOLS/DEVOPS', items: 'Git, Docker, Linux, AWS, LLVM' },
+    { category: 'THEORY', items: 'Algorithms, Distributed Systems, Compilers, OS' },
+  ],
+  contacts: [
+    { label: 'Email', url: 'mailto:estella.thy06@gmail.com', display_text: 'estella.thy06@gmail.com' },
+    { label: 'GitHub', url: 'https://github.com/estellathy06', display_text: 'github.com/estellathy06' },
+    { label: 'LinkedIn', url: 'https://linkedin.com/in/estella-tang-9a2173299/', display_text: 'linkedin.com/in/estella-tang-9a2173299/' },
+  ],
+};
+
 function App() {
   const [history, setHistory] = useState([
     {
@@ -41,6 +68,35 @@ function App() {
   const [isFocused, setIsFocused] = useState(true);
   const inputRef = useRef(null);
   const scrollRef = useRef(null);
+
+  // Dynamic content state
+  const [profileData, setProfileData] = useState(FALLBACK.profile);
+  const [projectsData, setProjectsData] = useState(FALLBACK.projects);
+  const [skillsData, setSkillsData] = useState(FALLBACK.skills);
+  const [contactsData, setContactsData] = useState(FALLBACK.contacts);
+
+  // Fetch content from Supabase on mount
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const [profileRes, projectsRes, skillsRes, contactRes] = await Promise.all([
+          supabase.from('profile').select('*').limit(1).single(),
+          supabase.from('projects').select('*').order('sort_order'),
+          supabase.from('skills').select('*').order('sort_order'),
+          supabase.from('contact').select('*').order('sort_order'),
+        ]);
+
+        if (profileRes.data) setProfileData(profileRes.data);
+        if (projectsRes.data) setProjectsData(projectsRes.data);
+        if (skillsRes.data) setSkillsData(skillsRes.data);
+        if (contactRes.data) setContactsData(contactRes.data);
+      } catch (err) {
+        console.warn('Failed to fetch from Supabase, using fallback data:', err);
+      }
+    };
+
+    fetchContent();
+  }, []);
 
   // Auto-focus input on mount and clicks
   useEffect(() => {
@@ -81,10 +137,10 @@ function App() {
           output = (
             <div className="output-multi">
               <p className="text-cyan">=========================================</p>
-              <p className="text-magenta font-bold">IDENTITY: Estella Tang</p>
-              <p className="text-white">STATUS: CS Student @ University of Waterloo</p>
-              <p>OBJECTIVE: Seeking co-op roles where I can architect robust systems, crush complex bugs, and build products at scale.</p>
-              <p>I thrive in high-impact environments. I am building toward a career in backend engineering, distributed systems, and AI.</p>
+              <p className="text-magenta font-bold">IDENTITY: {profileData.name}</p>
+              <p className="text-white">STATUS: {profileData.status}</p>
+              <p>OBJECTIVE: {profileData.objective}</p>
+              <p>{profileData.bio}</p>
               <p className="text-cyan">=========================================</p>
             </div>
           );
@@ -92,46 +148,35 @@ function App() {
 
         case 'projects':
           if (args[1] === '--detail') {
-            output = (
-              <div className="output-multi">
-                <p className="text-red">Error: Expected project ID. Usage: projects --detail [name]</p>
-                <p className="text-secondary">Available details: <span className="text-white">compiler, distributed-kv, neural-net</span></p>
-              </div>
-            );
-            if (args[2] === 'compiler') {
+            const targetSlug = args[2];
+            const project = targetSlug ? projectsData.find((p) => p.slug === targetSlug) : null;
+
+            if (project) {
               output = (
                 <div className="output-multi">
-                  <p className="text-cyan">Project: C-Minus Compiler</p>
-                  <p>- Developed a custom compiler in C++ using LLVM.</p>
-                  <p>- Features: Lexical analysis, recursive descent parsing, semantic analysis, and optimized x86 code generation.</p>
-                  <p>- <a href="#" className="terminal-link">View Repo</a></p>
+                  <p className="text-cyan">Project: {project.title}</p>
+                  {project.detail_bullets.map((bullet, i) => (
+                    <p key={i}>- {bullet}</p>
+                  ))}
+                  <p><a href={project.repo_url} className="terminal-link" target="_blank" rel="noopener noreferrer">View Repo</a></p>
                 </div>
               );
-            } else if (args[2] === 'distributed-kv') {
+            } else {
               output = (
                 <div className="output-multi">
-                  <p className="text-cyan">Project: DistKV (Go)</p>
-                  <p>- Built a distributed key-value store implementing Raft consensus.</p>
-                  <p>- Features: Fault tolerance, leader election, log replication, snapshotting for fast recovery.</p>
-                  <p>- <a href="#" className="terminal-link">View Repo</a></p>
-                </div>
-              );
-            } else if (args[2] === 'neural-net') {
-              output = (
-                <div className="output-multi">
-                  <p className="text-cyan">Project: Zero-Dep Neural Network (Python)</p>
-                  <p>- Implemented backpropagation and gradient descent purely with NumPy.</p>
-                  <p>- Achieved 96% accuracy on MNIST. Heavily optimized matrix multiplications.</p>
-                  <p>- <a href="#" className="terminal-link">View Repo</a></p>
+                  <p className="text-red">Error: Expected project ID. Usage: projects --detail [name]</p>
+                  <p className="text-secondary">Available details: <span className="text-white">{projectsData.map((p) => p.slug).join(', ')}</span></p>
                 </div>
               );
             }
           } else {
             output = (
               <div className="output-multi">
-                <p>1. <span className="text-yellow">compiler</span> - Custom C-like Compiler (C++, LLVM)</p>
-                <p>2. <span className="text-yellow">distributed-kv</span> - Distributed Database (Go, Raft)</p>
-                <p>3. <span className="text-yellow">neural-net</span> - Scratch Neural Network (Python, Math)</p>
+                {projectsData.map((project, i) => (
+                  <p key={project.slug}>
+                    {i + 1}. <span className="text-yellow">{project.slug}</span> - {project.short_description}
+                  </p>
+                ))}
                 <br />
                 <p className="text-secondary">Type <span className="text-white">projects --detail [name]</span> for engineering notes.</p>
               </div>
@@ -142,10 +187,11 @@ function App() {
         case 'skills':
           output = (
             <div className="output-multi">
-              <p><span className="text-blue">LANGUAGES:</span> C++, Go, Python, JavaScript, TypeScript, SQL, Bash</p>
-              <p><span className="text-blue">FRAMEWORKS:</span> React, Node.js, Express, Flask</p>
-              <p><span className="text-blue">TOOLS/DEVOPS:</span> Git, Docker, Linux, AWS, LLVM</p>
-              <p><span className="text-blue">THEORY:</span> Algorithms, Distributed Systems, Compilers, OS</p>
+              {skillsData.map((skill) => (
+                <p key={skill.category}>
+                  <span className="text-blue">{skill.category}:</span> {skill.items}
+                </p>
+              ))}
             </div>
           );
           break;
@@ -162,9 +208,12 @@ function App() {
         case 'contact':
           output = (
             <div className="output-multi">
-              <p><span className="text-magenta">Email:</span>     <a href="mailto:estella.thy06@gmail.com" className="terminal-link">estella.thy06@gmail.com</a></p>
-              <p><span className="text-magenta">GitHub:</span>    <a href="https://github.com/estellathy06" className="terminal-link">github.com/estellathy06</a></p>
-              <p><span className="text-magenta">LinkedIn:</span>  <a href="https://linkedin.com/in/estella-tang-9a2173299/" className="terminal-link">linkedin.com/in/estella-tang-9a2173299/</a></p>
+              {contactsData.map((c) => (
+                <p key={c.label}>
+                  <span className="text-magenta">{c.label}:</span>{'     '.substring(0, Math.max(1, 10 - c.label.length))}
+                  <a href={c.url} className="terminal-link">{c.display_text}</a>
+                </p>
+              ))}
             </div>
           );
           break;
